@@ -64,7 +64,7 @@ for(;;){
 vTaskDelete( NULL );
 }
 ```
-Con un resultado que va alternando ambos mensajes ya que se ejecuta el bucle, la tarea y vuelve a empezar dado que programamos un bucle infinito.
+Con un resultado que va alternando ambos mensajes ya que se ejecuta el bucle, la tarea y vuelve a empezar de nuevo, dado que programamos un bucle infinito.
 ```
 this is ESP32 Task
 this is another Task
