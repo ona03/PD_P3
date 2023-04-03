@@ -85,7 +85,7 @@ flowchart TD;
     D-->H[delay de 1 segundo];
     H-->E[Llama anotherTask e imprime 'This is another Task'];
     E-->F[delay de 1 segundo];
-    F-->H;
+    F-->D;
 
 ```
 
