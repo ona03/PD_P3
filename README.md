@@ -139,7 +139,7 @@ void Task1(void *pvParameters) {
 ```
 
 ``Task2``:
-La ``Task2`` teiene una estructura de funcionamiento muy parecida a la primera, pero en vez de encender el led, se dedica a apagarlo. 
+La ``Task2`` tiene una estructura de funcionamiento muy parecida a la primera, pero en vez de encender el led, se dedica a apagarlo. 
 
 ```cpp
 void Task2(void *pvParameters) { 
