@@ -82,9 +82,9 @@ this is ESP32 Task
 
 flowchart TD;
     C[Identificador de tareas se inicializa]-->D[Imprime 'This is ESP32 Task'];
-    D-->H[delay(1000)];
-    H-->E[Llama anotherTask() e imprime 'This is another Task'];
-    E-->F[delay(1000)];
+    D-->H[delay de 1 segundo];
+    H-->E[Llama anotherTask e imprime 'This is another Task'];
+    E-->F[delay de 1 segundo];
     F-->H;
 
 ```
