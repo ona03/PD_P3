@@ -73,3 +73,85 @@ this is another Task
 this is ESP32 Task
 ...
 ```
+
+## PARTE 2
+Procedemos a realizar la segunda aparte de la pràctica. Esta parte consiste en realizar un programa que utilice dos tareas una enciende un led y otra lo apaga, dichas tareas deben estar sincronizadas.
+
+
+Primero de todo, como en cualquier programa hay que declarar las diferentes variables. En este caso se declaran dos tareas, la Taska1, la Taska2 y un identificador de tareas mutex_v.
+
+SemaphoreHandle_t mutex_v; 
+
+void Task1(void *pvParameters);
+void Task2(void *pvParameters);
+
+A continuación nos encontramos con el void setup(). En el cual:
+
+- Se declara el pin en el que se pondrá nuestro Led, en nuestro caso el 17.
+
+- Se comprueva si se ha creado bien nuestro identificador de tareas, para ello 
+utilizamos xSemaphoreCreateMutex(). En caso de fallida, se devolvera por pantalla "Mutex can not be created". 
+
+    mutex_v = xSemaphoreCreateMutex(); 
+    if (mutex_v == NULL) { 
+        Serial.println("Mutex can not be created"); 
+    }
+
+Por último se ponen en funcionamiento las dos tareas en paralelo. La taska1 i la taska2. 
+	
+    xTaskCreate(Task1, "Task1", 1000, NULL, 1, NULL); 
+    xTaskCreate(Task2, "Task2", 1000, NULL, 1, NULL); 
+
+Taska1: 
+Esta tasca tiene un funcionamiento muy simple, su único propósito consiste en encender el led y ceder el control. Entre cada instruccion, espera 500 ms.
+
+void Task1(void *pvParameters) { 
+    while(1) { 
+        xSemaphoreTake(mutex_v, portMAX_DELAY); 
+        Serial.println("Hi from Task1"); 
+        digitalWrite(17,HIGH);
+        
+        vTaskDelay(pdMS_TO_TICKS(500)); 
+        xSemaphoreGive(mutex_v); 
+        vTaskDelay(pdMS_TO_TICKS(500)); 
+    } 
+} 
+
+
+
+
+Taska2:
+La taska2 teiene una estructura de funcionamiento, muy parecida a la taska1. Pero en vez de encender el led, se dedica a apagarlo. 
+
+
+
+void Task2(void *pvParameters) { 
+    while(1) { 
+        xSemaphoreTake(mutex_v, portMAX_DELAY); 
+        Serial.println("Hi from Task2"); 
+        digitalWrite(17,LOW);
+
+        vTaskDelay(pdMS_TO_TICKS(500)); 
+        xSemaphoreGive(mutex_v); 
+        vTaskDelay(pdMS_TO_TICKS(500)); 
+    } 
+} 
+
+void loop() { }
+
+
+
+### Diagrama de flujo
+
+
+<div class="mermaid">
+flowchart TD;
+    A[Declaracion de variables/identificador de tareas] -->B[Taska 1 enciende led];    
+    B-->G[Taska1/2 espera 500 ms];
+    G-->H[Taska1 cede el mutex_v/control];
+    H-->I[Taska2 apaga el led];
+    I-->J[taska1/2 espera 500 ms];
+    J-->K[Taska2 cede el control]-->B;
+ 
+   
+  </div>
